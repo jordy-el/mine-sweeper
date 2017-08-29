@@ -1,5 +1,14 @@
 "use strict";
 
+function Cell() {
+  Cell.prototype.marked = false;
+  Cell.prototype.mine = false;
+  this.number = 0;
+  Cell.prototype.incrementNumber = function() {
+    this.number++;
+  }
+}
+
 const mineSweeper = {
   init: function() {
     this.renderBoard();
@@ -7,6 +16,7 @@ const mineSweeper = {
     this.setTimer(0);
     this.mineCount = 10;
     this.setMines(this.mineCount);
+    this.createCells();
   },
   renderBoard: function() {
     function createGrid() {
@@ -48,12 +58,40 @@ const mineSweeper = {
     this.mineCount++;
     this.setMines(this.mineCount);
   },
+  createCells: function() {
+
+    // Function for getting surrounding cells from index
+    function getSurroundingCells(index) {
+      // TODO Implement function for returning list of cells surrounding mine cell
+      return cells
+    }
+
+    // Populate cells list with cells
+    this.cells = [];
+    const cells = this.cells;
+    [...new Array(100).keys()].forEach(() => {
+      this.cells.push(new Cell());
+    });
+
+    // Initialize cells with game values
+
+      // Initialize cells with mines
+      _.sampleSize(this.cells, 10).forEach((cell) => {
+        cell.mine = true;
+      });
+
+      // Initialize cells with numbers
+      this.cells.forEach((cell, index) => {
+        if (cell.mine) {
+          getSurroundingCells(index).forEach((cell) => { cell.number++ })
+        }
+      });
+  },
   containsMine: function(cell) {
-    // TODO implement checker for mine inside cell
+    return this.cells[$(cell).data('position')].mine;
   },
   getNumber: function(cell) {
-    // TODO Implement number-of-bombs checker for cell
-    return '0'
+    return this.cells[$(cell).data('position')].number;
   }
 };
 
@@ -78,7 +116,7 @@ function main() {
 
     // Add style to clicked cell and animate game button on left mouseup -- cycle cell symbol on right mouseup
     if (event.which === 1) {
-      if (!$(this).hasClass('clicked')) { $(this).addClass('clicked'); $(this).text(mineSweeper.getNumber(this)) }
+      if (!$(this).hasClass('clicked') && !mineSweeper.containsMine(this)) { $(this).addClass('clicked'); $(this).text(mineSweeper.getNumber(this)) }
       mineSweeper.setButtonText(':)');
     } else if (event.which === 3) {
       let text = $(this).text();
