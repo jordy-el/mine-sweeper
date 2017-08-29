@@ -418,3 +418,16 @@ html {
 .cell.clicked:active {
     box-shadow: none;
 }
+
+.mine {
+    background-color: #ff820e;
+}
+
+.mine:hover {
+    background-color: #ff820e;
+    box-shadow: none;
+}
+
+.mine:active {
+    box-shadow: none;
+}
