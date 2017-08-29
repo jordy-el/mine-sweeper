@@ -288,3 +288,113 @@ textarea {
         page-break-after: avoid;
     }
 }
+
+html {
+    user-select: none;
+    cursor: default;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+}
+
+#header {
+    height: 4rem;
+    background-color: #ff993b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 10px 0 #027180;
+    z-index: 0;
+}
+
+#logo {
+    color: white;
+    font-size: 2rem;
+    font-family: 'Emblema One', cursive;
+}
+
+#game-container {
+    flex-grow: 1;
+    background-color: #2ca5b5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#game {
+    background-color: white;
+    width: 600px;
+    height: 700px;
+    box-shadow: 5px 5px 5px #027180;
+    margin: 2rem;
+}
+
+#game-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 100px;
+    background-color: #ffac60;
+}
+
+#game-button {
+    background-color: #ff820e;
+    width: 80px;
+    height: 60px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: 'Exo', sans-serif;
+}
+
+#game-button:hover {
+    box-shadow: 2px 2px 2px #d16400;
+}
+
+#game-button:active {
+    box-shadow: 1px 1px 1px #d16400;
+}
+
+.number {
+    background-color: #027180;
+    color: white;
+    font-family: 'Exo', sans-serif;
+    font-size: 1.8rem;
+    width: 80px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.row {
+    height: 60px;
+    display: flex;
+}
+
+.cell {
+    width: 60px;
+    height: 100%;
+    background-color: #4db8c7;
+}
+
+.cell:hover {
+    background-color: #7bd0dc;
+    box-shadow: 2px 2px 5px #027180;
+    z-index: 1;
+}
+
+.cell:active {
+    box-shadow: 1px 1px 3px #027180;
+}
