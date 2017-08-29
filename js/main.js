@@ -70,7 +70,7 @@ function main() {
   $cell.mousedown(function(event) {
 
     // Animate game button on left mousedown
-    if (event.which === 1) {
+    if (event.which === 1 && !$(this).hasClass('clicked')) {
       mineSweeper.setButtonText(':o');
     }
   });
