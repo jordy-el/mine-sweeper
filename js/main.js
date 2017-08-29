@@ -62,8 +62,37 @@ const mineSweeper = {
 
     // Function for getting surrounding cells from index
     function getSurroundingCells(index) {
-      // TODO Implement function for returning list of cells surrounding mine cell
-      return cells
+      const surroundingCells = [];
+      const sqrt = Math.sqrt(cells.length);
+      let up = false;
+      let down = false;
+      if (index >= sqrt) {
+        surroundingCells.push(cells[index - sqrt]);
+        up = true;
+      }
+      if (index < cells.length - sqrt) {
+        surroundingCells.push(cells[index + sqrt]);
+        down = true;
+      }
+      if (index % sqrt !== 0) {
+        surroundingCells.push(cells[index - 1]);
+        if (up) {
+          surroundingCells.push(cells[index - sqrt - 1])
+        }
+        if (down) {
+          surroundingCells.push(cells[index + sqrt - 1])
+        }
+      }
+      if ((index + 1) % sqrt !== 0) {
+        surroundingCells.push(cells[index + 1]);
+        if (up) {
+          surroundingCells.push(cells[index - sqrt + 1])
+        }
+        if (down) {
+          surroundingCells.push(cells[index + sqrt + 1])
+        }
+      }
+      return surroundingCells
     }
 
     // Populate cells list with cells
@@ -83,7 +112,7 @@ const mineSweeper = {
       // Initialize cells with numbers
       this.cells.forEach((cell, index) => {
         if (cell.mine) {
-          getSurroundingCells(index).forEach((cell) => { cell.number++ })
+          getSurroundingCells(index).forEach((cell, index) => { cell.number++ })
         }
       });
   },
