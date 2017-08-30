@@ -1,7 +1,5 @@
 "use strict";
 
-// TODO Add confetti for win
-
 const emoji = {
   smile: '😌',
   openMouth: '😨',
