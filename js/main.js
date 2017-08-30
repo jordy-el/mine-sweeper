@@ -1,6 +1,7 @@
 "use strict";
 
-//TODO Fix bug in mineCount preventing increment upon "!" cell selection
+// TODO Fix bug in mineCount preventing increment upon "!" cell selection
+// TODO Implement game win checking and notifying
 
 function Cell(id) {
   Cell.prototype.marked = false;
@@ -236,6 +237,14 @@ $(document).ready(() => {
 
   //Initialize main function on document load
   main();
+
+  //Animate game board visibility
+  $('#game').animate({
+    bottom: "0"
+  }, {
+    duration: 1000,
+    easing: 'easeOutBounce'
+  });
 
   // Handle click on game button
   $('#game-button').click(() => {
