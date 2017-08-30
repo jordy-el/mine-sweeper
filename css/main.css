@@ -432,12 +432,7 @@ html {
 }
 
 .mine-won {
-    background-color: #40a80e;
-}
-
-.mine-won:hover {
-    background-color: #40a80e;
-    box-shadow: none;
+    color: chartreuse;
 }
 
 .mine:active {

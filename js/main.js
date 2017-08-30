@@ -1,23 +1,16 @@
 "use strict";
 
-// TODO Fix bug in mineCount preventing increment upon "!" cell selection
+// TODO Add confetti for win
 
 const emoji = {
   smile: '😌',
   openMouth: '😨',
   sunglasses: '😎',
-  frown: '😖'
+  frown: '😖',
+  bomb: '💣',
+  tick: '✔',
+  explode: '💥'
 };
-
-function Cell(id) {
-  Cell.prototype.marked = false;
-  Cell.prototype.mine = false;
-  this.number = 0;
-  Cell.prototype.incrementNumber = function() {
-    this.number++;
-  }
-  this.id = id
-}
 
 const mineSweeper = {
   init: function() {
@@ -61,6 +54,7 @@ const mineSweeper = {
     $('#timer').text(int.toString());
   },
   setMines: function(int) {
+    this.mineCount = int;
     $('#mines-left').text(int.toString());
   },
   decrementMines: function() {
@@ -130,17 +124,22 @@ const mineSweeper = {
     clearInterval(this.timer);
     this.gameFinished = true;
   },
-  gameLost: function() {
+  gameLost: function(clickedBomb) {
     this.setButtonText(emoji.frown);
     this.cells.filter((cell) => { return cell.mine }).forEach((mine) => {
-      $(`[data-position=${mine.id}]`).addClass('mine');
+      const $cell = $(`[data-position=${mine.id}]`);
+      $cell.addClass('mine');
+      $cell.text(emoji.bomb);
+      $(clickedBomb).text(emoji.explode);
     });
     this.gameOver()
   },
   gameWon: function() {
     this.setButtonText(emoji.sunglasses);
     this.cells.filter((cell) => { return cell.mine }).forEach((mine) => {
-      $(`[data-position=${mine.id}]`).addClass('mine-won');
+      const $cell = $(`[data-position=${mine.id}]`);
+      $cell.addClass('mine-won');
+      $cell.text(emoji.tick);
     });
     this.gameOver();
   },
@@ -181,10 +180,20 @@ const mineSweeper = {
     if (!cell.mine) {
       propagateClick(node, true);
     } else {
-      this.gameLost();
+      this.gameLost(node);
     }
   }
 };
+
+function Cell(id) {
+  Cell.prototype.marked = false;
+  Cell.prototype.mine = false;
+  this.number = 0;
+  Cell.prototype.incrementNumber = function() {
+    this.number++;
+  }
+  this.id = id
+}
 
 function main() {
 
@@ -224,6 +233,10 @@ function main() {
           if (!$(this).hasClass('clicked')) {
             mineSweeper.clickCell(this)
           }
+
+          // Reset mine count to 10 - amount of '!' on the board
+          const currentMinesMarked = $(".cell:contains('!')").length;
+          mineSweeper.setMines(10 - currentMinesMarked);
         } else if (event.which === 3) {
           let text = $(this).text();
           if (text === '') {
