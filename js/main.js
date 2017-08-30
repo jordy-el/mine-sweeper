@@ -1,5 +1,7 @@
 "use strict";
 
+// TODO Implement different difficulty settings
+
 const emoji = {
   smile: '😌',
   openMouth: '😨',
