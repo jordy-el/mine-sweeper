@@ -354,6 +354,8 @@ html {
     justify-content: center;
     color: white;
     font-family: 'Exo', sans-serif;
+    font-size: 2.5rem;
+    padding-top: 7px;
 }
 
 #game-button:hover {
@@ -426,6 +428,15 @@ html {
 
 .mine:hover {
     background-color: #ff820e;
+    box-shadow: none;
+}
+
+.mine-won {
+    background-color: #40a80e;
+}
+
+.mine-won:hover {
+    background-color: #40a80e;
     box-shadow: none;
 }
 

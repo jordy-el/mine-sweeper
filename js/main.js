@@ -1,7 +1,13 @@
 "use strict";
 
 // TODO Fix bug in mineCount preventing increment upon "!" cell selection
-// TODO Implement game win checking and notifying
+
+const emoji = {
+  smile: '😌',
+  openMouth: '😨',
+  sunglasses: '😎',
+  frown: '😖'
+};
 
 function Cell(id) {
   Cell.prototype.marked = false;
@@ -16,7 +22,7 @@ function Cell(id) {
 const mineSweeper = {
   init: function() {
     this.renderBoard();
-    this.setButtonText(':)');
+    this.setButtonText(emoji.smile);
     this.timeCount = 0;
     this.setTimer(this.timeCount);
     this.mineCount = 10;
@@ -122,11 +128,21 @@ const mineSweeper = {
   },
   gameOver: function() {
     clearInterval(this.timer);
-    this.setButtonText(':(');
+    this.gameFinished = true;
+  },
+  gameLost: function() {
+    this.setButtonText(emoji.frown);
     this.cells.filter((cell) => { return cell.mine }).forEach((mine) => {
       $(`[data-position=${mine.id}]`).addClass('mine');
     });
-    this.gameFinished = true;
+    this.gameOver()
+  },
+  gameWon: function() {
+    this.setButtonText(emoji.sunglasses);
+    this.cells.filter((cell) => { return cell.mine }).forEach((mine) => {
+      $(`[data-position=${mine.id}]`).addClass('mine-won');
+    });
+    this.gameOver();
   },
   checkWin: function() {
     return this.cells.filter((cell) => { return cell.mine }).every((mine) => {
@@ -165,7 +181,7 @@ const mineSweeper = {
     if (!cell.mine) {
       propagateClick(node, true);
     } else {
-      this.gameOver();
+      this.gameLost();
     }
   }
 };
@@ -189,7 +205,7 @@ function main() {
       if (!mineSweeper.gameFinished) {
         // Animate game button on left mousedown
         if (event.which === 1 && !$(this).hasClass('clicked')) {
-          mineSweeper.setButtonText(':o');
+          mineSweeper.setButtonText(emoji.openMouth);
         }
       }
     });
@@ -204,7 +220,7 @@ function main() {
 
         // Add style to clicked cell and animate game button on left mouseup -- cycle cell symbol on right mouseup
         if (event.which === 1) {
-          mineSweeper.setButtonText(':)');
+          mineSweeper.setButtonText(emoji.smile);
           if (!$(this).hasClass('clicked')) {
             mineSweeper.clickCell(this)
           }
@@ -226,10 +242,12 @@ function main() {
             $(this).text('');
           }
         }
-      }
 
-      // Check if game is won
-      console.log(mineSweeper.checkWin());
+        // Check if game is won
+        if (mineSweeper.checkWin()) {
+          mineSweeper.gameWon();
+        }
+      }
     });
 }
 
@@ -250,14 +268,14 @@ $(document).ready(() => {
   $('#game-button').click(() => {
     const $game = $('#game');
     $game.animate({
-      left: '-=2000'
+      left: '-=1500'
     }, {
       duration: 500,
       easing: 'easeInBack',
       complete: () => {
         $game.addClass('invisible');
         $game.animate({
-          left: '+=4000'
+          left: '+=3000'
         }, {
           duration: 0,
           complete: () => {
@@ -265,7 +283,7 @@ $(document).ready(() => {
             main();
             $game.removeClass('invisible');
             $game.animate({
-              left: '-=2000'
+              left: '-=1500'
             }, {
               duration: 400,
               easing: 'easeOutBack'
