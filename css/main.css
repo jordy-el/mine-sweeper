@@ -331,6 +331,7 @@ html {
     height: 700px;
     box-shadow: 5px 5px 5px #027180;
     margin: 2rem;
+    position: relative;
 }
 
 #game-header {
@@ -430,4 +431,8 @@ html {
 
 .mine:active {
     box-shadow: none;
+}
+
+.invisible {
+    visibility: hidden;
 }

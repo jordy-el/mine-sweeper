@@ -1,5 +1,7 @@
 "use strict";
 
+//TODO Fix bug in mineCount preventing increment upon "!" cell selection
+
 function Cell(id) {
   Cell.prototype.marked = false;
   Cell.prototype.mine = false;
@@ -172,66 +174,96 @@ function main() {
   // Initialize minesweeper board
   mineSweeper.init();
 
-  //Handle click on game button
-
-  $('#game-button').click(() => {
-    mineSweeper.gameOver();
-    main();
-  });
-
   // Cell event handlers
-  let $cell = $('.cell');
-  $cell.on('contextmenu', function() {
-    return false
-  });
 
-  // Handle mouse down on cell
-  $cell.mousedown(function(event) {
-    if (!mineSweeper.gameFinished) {
-      // Animate game button on left mousedown
-      if (event.which === 1 && !$(this).hasClass('clicked')) {
-        mineSweeper.setButtonText(':o');
-      }
-    }
-  });
+    let $cell = $('.cell');
 
-  // Handle mouse up on cell
-  $cell.mouseup(function(event) {
+    // Prevent context menu on cells
+    $cell.on('contextmenu', function() {
+      return false
+    });
 
-    // Start timer
-    if (!mineSweeper.started) mineSweeper.begin();
-
-    if (!mineSweeper.gameFinished) {
-
-      // Add style to clicked cell and animate game button on left mouseup -- cycle cell symbol on right mouseup
-      if (event.which === 1) {
-        mineSweeper.setButtonText(':)');
-        if (!$(this).hasClass('clicked')) {
-          mineSweeper.clickCell(this)
-        }
-      } else if (event.which === 3) {
-        let text = $(this).text();
-        if (text === '') {
-          if (mineSweeper.mineCount !== 0) {
-            $(this).text('!');
-            mineSweeper.decrementMines();
-          } else {
-            $(this).text('?');
-          }
-        } else if (text === '!') {
-          if (mineSweeper.mineCount !== 10) {
-            $(this).text('?');
-            mineSweeper.incrementMines();
-          }
-        } else if (text === '?') {
-          $(this).text('');
+    // Handle mouse down on cell
+    $cell.mousedown(function(event) {
+      if (!mineSweeper.gameFinished) {
+        // Animate game button on left mousedown
+        if (event.which === 1 && !$(this).hasClass('clicked')) {
+          mineSweeper.setButtonText(':o');
         }
       }
-    }
+    });
 
-    // Check if game is won
-    console.log(mineSweeper.checkWin());
-  });
+    // Handle mouse up on cell
+    $cell.mouseup(function(event) {
+
+      // Start timer
+      if (!mineSweeper.started) mineSweeper.begin();
+
+      if (!mineSweeper.gameFinished) {
+
+        // Add style to clicked cell and animate game button on left mouseup -- cycle cell symbol on right mouseup
+        if (event.which === 1) {
+          mineSweeper.setButtonText(':)');
+          if (!$(this).hasClass('clicked')) {
+            mineSweeper.clickCell(this)
+          }
+        } else if (event.which === 3) {
+          let text = $(this).text();
+          if (text === '') {
+            if (mineSweeper.mineCount !== 0) {
+              $(this).text('!');
+              mineSweeper.decrementMines();
+            } else {
+              $(this).text('?');
+            }
+          } else if (text === '!') {
+            if (mineSweeper.mineCount !== 10) {
+              $(this).text('?');
+              mineSweeper.incrementMines();
+            }
+          } else if (text === '?') {
+            $(this).text('');
+          }
+        }
+      }
+
+      // Check if game is won
+      console.log(mineSweeper.checkWin());
+    });
 }
 
-$(document).ready(main());
+$(document).ready(() => {
+
+  //Initialize main function on document load
+  main();
+
+  // Handle click on game button
+  $('#game-button').click(() => {
+    const $game = $('#game');
+    $game.animate({
+      left: '-=2000'
+    }, {
+      duration: 500,
+      easing: 'easeInBack',
+      complete: () => {
+        $game.addClass('invisible');
+        $game.animate({
+          left: '+=4000'
+        }, {
+          duration: 0,
+          complete: () => {
+            mineSweeper.gameOver();
+            main();
+            $game.removeClass('invisible');
+            $game.animate({
+              left: '-=2000'
+            }, {
+              duration: 400,
+              easing: 'easeOutBack'
+            });
+          }
+        });
+      }
+    });
+  });
+});
